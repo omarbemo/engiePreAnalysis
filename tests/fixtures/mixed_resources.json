@@ -1,0 +1,23 @@
+[
+    {
+        "address": "aws_instance.web",
+        "type": "aws_instance",
+        "name": "web",
+        "attributes": {"ami": "ami-123"}
+    },
+    {
+        "address": "aws_ebs_volume.data_1",
+        "type": "aws_ebs_volume",
+        "name": "data_1",
+        "attributes": {"size": 20}
+    },
+    {
+        "address": "aws_volume_attachment.a",
+        "type": "aws_volume_attachment",
+        "name": "a",
+        "attributes": {
+            "volume_id": "${aws_ebs_volume.data_1.id}",
+            "instance_id": "${aws_instance.web.id}"
+        }
+    }
+]

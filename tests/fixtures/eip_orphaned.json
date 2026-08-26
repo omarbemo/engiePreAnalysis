@@ -1,0 +1,3 @@
+[
+    {"address": "aws_eip.ip", "type": "aws_eip", "name": "ip", "attributes": {"domain": "vpc"}}
+]

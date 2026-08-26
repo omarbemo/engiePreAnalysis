@@ -1,0 +1,5 @@
+[
+    {"address": "aws_instance.web", "type": "aws_instance", "name": "web", "attributes": {"ami": "ami-123"}},
+    {"address": "aws_instance.web2", "type": "aws_instance", "name": "web2", "attributes": {"ami": "ami-456"}},
+    {"address": "aws_eip.ip", "type": "aws_eip", "name": "ip", "attributes": {"instance": "${aws_instance.web2.id}"}}
+]

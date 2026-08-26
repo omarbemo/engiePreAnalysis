@@ -1,0 +1,71 @@
+[
+    {
+        "address": "aws_instance.web",
+        "type": "aws_instance",
+        "name": "web",
+        "attributes": {"ami": "ami-0123456789abcdef0", "instance_type": "t3.micro"}
+    },
+    {
+        "address": "aws_ebs_volume.attached_data",
+        "type": "aws_ebs_volume",
+        "name": "attached_data",
+        "attributes": {"availability_zone": "us-east-1a", "size": 100}
+    },
+    {
+        "address": "aws_volume_attachment.web_data",
+        "type": "aws_volume_attachment",
+        "name": "web_data",
+        "attributes": {
+            "volume_id": "${aws_ebs_volume.attached_data.id}",
+            "instance_id": "${aws_instance.web.id}"
+        }
+    },
+    {
+        "address": "aws_ebs_volume.orphan_backup",
+        "type": "aws_ebs_volume",
+        "name": "orphan_backup",
+        "attributes": {"availability_zone": "us-east-1a", "size": 50}
+    },
+    {
+        "address": "aws_nat_gateway.main",
+        "type": "aws_nat_gateway",
+        "name": "main",
+        "attributes": {"allocation_id": "eipalloc-0123"}
+    },
+    {
+        "address": "aws_route.private_default",
+        "type": "aws_route",
+        "name": "private_default",
+        "attributes": {
+            "route_table_id": "rtb-0456",
+            "nat_gateway_id": "${aws_nat_gateway.main.id}"
+        }
+    },
+    {
+        "address": "aws_nat_gateway.forgotten",
+        "type": "aws_nat_gateway",
+        "name": "forgotten",
+        "attributes": {"allocation_id": "eipalloc-0789"}
+    },
+    {
+        "address": "aws_lb.app",
+        "type": "aws_lb",
+        "name": "app",
+        "attributes": {"load_balancer_type": "application"}
+    },
+    {
+        "address": "aws_lb_listener.app_https",
+        "type": "aws_lb_listener",
+        "name": "app_https",
+        "attributes": {
+            "load_balancer_arn": "${aws_lb.app.arn}",
+            "port": 443
+        }
+    },
+    {
+        "address": "aws_lb.decommissioned",
+        "type": "aws_lb",
+        "name": "decommissioned",
+        "attributes": {"load_balancer_type": "application"}
+    }
+]

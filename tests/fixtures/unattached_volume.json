@@ -1,0 +1,8 @@
+[
+    {
+        "address": "aws_ebs_volume.orphan",
+        "type": "aws_ebs_volume",
+        "name": "orphan",
+        "attributes": {"availability_zone": "us-east-1a", "size": 50}
+    }
+]
