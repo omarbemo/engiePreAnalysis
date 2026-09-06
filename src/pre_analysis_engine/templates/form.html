@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Unused Resources</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; max-width: 800px; line-height: 1.6; }
+        .resource-card { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+        .resource-card.flagged { border-left: 5px solid #d9534f; background-color: #fdf7f7; }
+        .submit-btn { background-color: #0275d8; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        .submit-btn:hover { background-color: #025aa5; }
+    </style>
+</head>
+<body>
+
+    <h1>Resource Review Panel</h1>
+    <p>Check the boxes of the unused resources you want to <strong>Remove</strong>. Unchecked resources will be kept.</p>
+
+    <form method="POST">
+        {% if flagged_resources %}
+            {% for resource in flagged_resources %}
+                <div class="resource-card flagged">
+                    <label>
+                        <input type="checkbox" name="remove_resources" value="{{ resource.address }}">
+                        <strong>Remove:</strong> <code>{{ resource.address }}</code>
+                    </label>
+                    <p style="margin: 5px 0 0 25px; color: #555;">
+                        <em>Reason ({{ resource.rule }}):</em> {{ resource.reason }}
+                    </p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: green; font-weight: bold;">🎉 No unused resources were flagged!</p>
+        {% endif %}
+
+        <button type="submit" class="submit-btn">Process & Generate JSON</button>
+    </form>
+
+</body>
+</html>
