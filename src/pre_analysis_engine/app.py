@@ -57,7 +57,7 @@ def review_resources_web():
                 "reason": finding.reason
             })
             
-    return render_template("form.html", flagged_resources=flagged_resources)
+    return render_template("preAnalysisForm.html", flagged_resources=flagged_resources)
 
 
 if __name__ == "__main__":

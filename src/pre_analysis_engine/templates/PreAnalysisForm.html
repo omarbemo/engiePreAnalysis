@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review Unused Resources</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/formstyle.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Resource Review Panel</h1>
+      <p>
+        Check the boxes of the unused resources you want to
+        <strong>Remove</strong>. Unchecked resources will be kept.
+      </p>
+
+      <form method="POST">
+        {% if flagged_resources %} {% for resource in flagged_resources %}
+        <div class="resource-card flagged">
+          <label>
+            <input
+              type="checkbox"
+              name="remove_resources"
+              value="{{ resource.address }}"
+            />
+            <strong>Remove:</strong> <code>{{ resource.address }}</code>
+          </label>
+          <p><em>Reason ({{ resource.rule }}):</em> {{ resource.reason }}</p>
+        </div>
+        {% endfor %} {% else %}
+        <div class="empty-state">🎉 No unused resources were flagged!</div>
+        {% endif %}
+
+        <button type="submit" class="submit-btn">
+          Process & Generate JSON
+        </button>
+      </form>
+    </div>
+  </body>
+</html>
+>

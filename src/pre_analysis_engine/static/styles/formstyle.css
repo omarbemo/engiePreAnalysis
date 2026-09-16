@@ -1,0 +1,136 @@
+:root {
+  --bg: #0f172a;
+  --card: #ffffff;
+  --accent: #0d9488;
+  --accent-dark: #0f766e;
+  --text: #1e293b;
+  --muted: #64748b;
+  --border: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #134e4a 100%);
+  min-height: 100vh;
+  padding: 40px 16px;
+  color: var(--text);
+}
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 26px;
+  color: #f0fdfa;
+  text-align: center;
+}
+
+.container > p {
+  margin: 0 0 24px;
+  color: #99f6e4;
+  font-size: 14px;
+  text-align: center;
+}
+
+.container > p strong {
+  color: #ffffff;
+}
+
+/* Resource Cards */
+.resource-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border: 1.5px solid var(--border);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.resource-card:hover {
+  border-color: var(--accent);
+}
+
+.resource-card label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.resource-card input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.resource-card code {
+  background: #f1f5f9;
+  color: var(--accent-dark);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13.5px;
+  word-break: break-all;
+}
+
+.resource-card p {
+  margin: 10px 0 0 28px;
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.resource-card p em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Empty State Styling */
+.empty-state {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 40px 24px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  margin-bottom: 24px;
+}
+
+/* Submit Button & Wrapper */
+.submit-btn {
+  display: block;
+  width: auto;
+  margin: 24px auto 0;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 13px 32px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.submit-btn:hover {
+  background: var(--accent-dark);
+}

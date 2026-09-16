@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CloudSage Azure Onboarding Form</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --card: #ffffff;
+        --accent: #0d9488;
+        --accent-dark: #0f766e;
+        --text: #1e293b;
+        --muted: #64748b;
+        --border: #e2e8f0;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #134e4a 100%);
+        min-height: 100vh;
+        padding: 40px 16px;
+      }
+      .container {
+        max-width: 680px;
+        margin: 0 auto;
+      }
+      .header {
+        text-align: center;
+        color: #f0fdfa;
+        margin-bottom: 24px;
+      }
+      .header h1 {
+        margin: 0 0 8px;
+        font-size: 26px;
+      }
+      .header p {
+        margin: 0;
+        color: #99f6e4;
+        font-size: 14px;
+      }
+      .card {
+        background: var(--card);
+        border-radius: 12px;
+        padding: 28px 28px 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      }
+      .question {
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 22px;
+        margin-bottom: 22px;
+      }
+      .question:last-child {
+        border-bottom: none;
+      }
+      .q-label {
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 12px;
+        line-height: 1.4;
+        display: block;
+        font-size: 15px;
+      }
+      .q-num {
+        color: var(--accent);
+        font-weight: 700;
+        margin-right: 6px;
+      }
+      .options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .opt {
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        padding: 9px 14px;
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--text);
+        background: #f8fafc;
+        transition: all 0.15s;
+        user-select: none;
+      }
+      .opt:hover {
+        border-color: var(--accent);
+      }
+      .opt.selected {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+      .scale-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .scale-labels span {
+        max-width: 33%;
+      }
+      .scale-labels span:first-child {
+        text-align: left;
+      }
+      .scale-labels span:nth-child(2) {
+        text-align: center;
+      }
+      .scale-labels span:last-child {
+        text-align: right;
+      }
+      .required {
+        color: #ef4444;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .submit-row {
+        padding: 20px 0 24px;
+        text-align: center;
+      }
+      button#submitBtn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 13px 32px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      button#submitBtn:hover {
+        background: var(--accent-dark);
+      }
+      .error-msg {
+        color: #ef4444;
+        font-size: 13px;
+        margin-top: 8px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>CloudSage (Azure Edition)</h1>
+        <p>Security & Cost Optimization Onboarding</p>
+      </div>
+
+      <form id="onboardingForm">
+        <div class="card">
+          <!-- Question 1: Automation Policy Controls -->
+          <div class="question">
+            <span class="q-label"
+              ><span class="q-num">1.</span>Do you have compliance or security
+              policies restricting automated infrastructure changes?</span
+            >
+            <div class="options" data-field="q1">
+              <div class="opt" data-value="Yes">Yes</div>
+              <div class="opt" data-value="No">No</div>
+            </div>
+          </div>
+
+          <!-- Question 1.1: Security Constraints -->
+          <div class="question" id="q1_1-question" style="display: none">
+            <span class="q-label"
+              ><span class="q-num">1.1</span>Which security constraints
+              apply?</span
+            >
+            <div
+              style="font-size: 13px; color: var(--muted); margin-bottom: 10px"
+            >
+              Select all that apply
+            </div>
+            <div id="q1_1-options"></div>
+          </div>
+
+          <!-- Question 2: Encryption Requirements -->
+          <div class="question">
+            <span class="q-label"
+              ><span class="q-num">2.</span>What level of key management is
+              required for compute and storage encryption?
+              <span class="required">*</span></span
+            >
+            <div
+              class="options"
+              data-field="q2_encryption"
+              data-required="true"
+            >
+              <div class="opt" data-value="Microsoft-managed">
+                Platform-Managed Keys (PMK)
+              </div>
+              <div class="opt" data-value="Customer-managed">
+                Customer-Managed Keys (BYOK / Key Vault)
+              </div>
+              <div class="opt" data-value="Confidential Computing">
+                Confidential Computing / Hardware Enclaves
+              </div>
+            </div>
+            <div class="error-msg">Please select an option.</div>
+          </div>
+
+          <!-- Question 3: Tradeoff Priority -->
+          <div class="question">
+            <span class="q-label"
+              ><span class="q-num">3.</span>Prioritize minimal architectural
+              change versus maximum cost reduction:
+              <span class="required">*</span></span
+            >
+            <input
+              type="range"
+              id="q3"
+              min="1"
+              max="5"
+              step="1"
+              value="3"
+              data-field="q3"
+            />
+            <div class="scale-labels">
+              <span>Preserve architecture</span>
+              <span>Neutral</span>
+              <span>Maximize savings</span>
+            </div>
+          </div>
+
+          <!-- Question 4: Network Boundaries -->
+          <div class="question">
+            <span class="q-label"
+              ><span class="q-num">4.</span>What network access restrictions
+              apply to target Azure resources?
+              <span class="required">*</span></span
+            >
+            <div class="options" data-field="q4_network" data-required="true">
+              <div class="opt" data-value="Private Endpoints Only">
+                Private Endpoints / VNet Integration Only
+              </div>
+              <div class="opt" data-value="Restricted Public">
+                NSG-Restricted Public Access
+              </div>
+              <div class="opt" data-value="No Restrictions">
+                Standard Public Access Permitted
+              </div>
+            </div>
+            <div class="error-msg">Please select an option.</div>
+          </div>
+
+          <!-- Question 5: Serverless & Compute Modernization -->
+          <div class="question">
+            <span class="q-label"
+              ><span class="q-num">5.</span>Would you consider migrating compute
+              workloads to Azure Container Apps or Functions?
+              <span class="required">*</span></span
+            >
+            <div
+              class="options"
+              data-field="q5_serverless"
+              data-required="true"
+            >
+              <div class="opt" data-value="Yes">Yes</div>
+              <div class="opt" data-value="No">No</div>
+              <div class="opt" data-value="Already using Azure Serverless">
+                Already using Azure Serverless
+              </div>
+            </div>
+            <div class="error-msg">Please select an option.</div>
+          </div>
+
+          <!-- Question 6: Azure Region Selection -->
+          <div class="question">
+            <span class="q-label"
+              ><span class="q-num">6.</span>Do you require resources to stay
+              within a specific Azure Region?</span
+            >
+            <div class="options" data-field="q6_region_req">
+              <div class="opt" data-value="Yes">Yes</div>
+              <div class="opt" data-value="No">No</div>
+            </div>
+          </div>
+
+          <!-- Azure Regions Dropdown -->
+          <div class="question" id="q6-region-question" style="display: none">
+            <span class="q-label">Select Primary Azure Region</span>
+            <input
+              type="text"
+              id="regionSearch"
+              placeholder="Search Azure regions (e.g. East US, West Europe)..."
+              style="
+                width: 100%;
+                padding: 9px 12px;
+                border: 1.5px solid var(--border);
+                border-radius: 8px;
+                font-size: 14px;
+                margin-bottom: 8px;
+              "
+            />
+            <div
+              id="regionList"
+              style="
+                border: 1.5px solid var(--border);
+                border-radius: 8px;
+                max-height: 200px;
+                overflow-y: auto;
+              "
+            ></div>
+            <div
+              id="regionSelectedLabel"
+              style="font-size: 13px; color: var(--muted); margin-top: 8px"
+            ></div>
+          </div>
+        </div>
+
+        <div class="submit-row">
+          <button type="submit" id="submitBtn">
+            Submit Onboarding Details
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      // Single-select button handling
+      document.querySelectorAll(".options").forEach((group) => {
+        group.addEventListener("click", (e) => {
+          const opt = e.target.closest(".opt");
+          if (!opt) return;
+          group
+            .querySelectorAll(".opt")
+            .forEach((o) => o.classList.remove("selected"));
+          opt.classList.add("selected");
+        });
+      });
+
+      // Security Constraints List
+      const securityConstraints = [
+        {
+          key: "encryption",
+          label: "Encryption at rest and in transit must remain enforced",
+        },
+        {
+          key: "no_rbac_changes",
+          label:
+            "No structural modifications to Azure RBAC or Managed Identities",
+        },
+        {
+          key: "nsg_rules",
+          label: "No automated altering of Network Security Groups (NSGs)",
+        },
+        {
+          key: "compliance_framework",
+          label:
+            "Strict adherence required (HIPAA, PCI-DSS, ISO 27001, FedRAMP)",
+        },
+        {
+          key: "diagnostic_logs",
+          label:
+            "Azure Monitor / Log Analytics export configurations must remain untouched",
+        },
+        {
+          key: "private_link",
+          label: "Disallow resources exposed via public IP addresses",
+        },
+        {
+          key: "manual_approval",
+          label:
+            "All production optimization actions require manual authorization",
+        },
+      ];
+
+      const q1_1Options = document.getElementById("q1_1-options");
+      securityConstraints.forEach((c) => {
+        const row = document.createElement("label");
+        row.style.cssText =
+          "display:flex; align-items:flex-start; gap:8px; font-size:14px; margin-bottom:8px; cursor:pointer;";
+        row.innerHTML = `<input type="checkbox" class="q1_1-checkbox" value="${c.key}" style="margin-top:3px;"><span>${c.label}</span>`;
+        q1_1Options.appendChild(row);
+      });
+
+      const q1Group = document.querySelector('.options[data-field="q1"]');
+      const q1_1Question = document.getElementById("q1_1-question");
+      q1Group.addEventListener("click", (e) => {
+        const opt = e.target.closest(".opt");
+        if (!opt) return;
+        if (opt.dataset.value === "Yes") {
+          q1_1Question.style.display = "block";
+        } else {
+          q1_1Question.style.display = "none";
+          q1_1Options
+            .querySelectorAll(".q1_1-checkbox")
+            .forEach((cb) => (cb.checked = false));
+        }
+      });
+
+      // Azure Regions Mapping
+      const azureRegions = [
+        { code: "eastus", label: "East US (Virginia)" },
+        { code: "eastus2", label: "East US 2 (Virginia)" },
+        { code: "centralus", label: "Central US (Iowa)" },
+        { code: "westus2", label: "West US 2 (Washington)" },
+        { code: "westus3", label: "West US 3 (Arizona)" },
+        { code: "canadacentral", label: "Canada Central (Toronto)" },
+        { code: "brazilsouth", label: "Brazil South (Sao Paulo State)" },
+        { code: "northeurope", label: "North Europe (Ireland)" },
+        { code: "westeurope", label: "West Europe (Netherlands)" },
+        { code: "uksouth", label: "UK South (London)" },
+        {
+          code: "germanywestcentral",
+          label: "Germany West Central (Frankfurt)",
+        },
+        { code: "switzerlandnorth", label: "Switzerland North (Zurich)" },
+        { code: "francecentral", label: "France Central (Paris)" },
+        { code: "uaenorth", label: "UAE North (Dubai)" },
+        {
+          code: "southafricanorth",
+          label: "South Africa North (Johannesburg)",
+        },
+        { code: "centralindia", label: "Central India (Pune)" },
+        { code: "southeastasia", label: "Southeast Asia (Singapore)" },
+        { code: "eastasia", label: "East Asia (Hong Kong)" },
+        { code: "japaneast", label: "Japan East (Tokyo)" },
+        { code: "koreacentral", label: "Korea Central (Seoul)" },
+        { code: "australiaeast", label: "Australia East (New South Wales)" },
+      ];
+
+      let selectedRegion = "";
+      const regionListEl = document.getElementById("regionList");
+      const regionSearchEl = document.getElementById("regionSearch");
+      const regionSelectedLabelEl = document.getElementById(
+        "regionSelectedLabel",
+      );
+
+      function renderRegions(filter) {
+        regionListEl.innerHTML = "";
+        const f = (filter || "").toLowerCase();
+        azureRegions
+          .filter(
+            (r) => r.label.toLowerCase().includes(f) || r.code.includes(f),
+          )
+          .forEach((r) => {
+            const item = document.createElement("div");
+            item.textContent = `${r.label} (${r.code})`;
+            item.dataset.code = r.code;
+            item.style.cssText =
+              "padding:9px 12px; font-size:13px; cursor:pointer; border-bottom:1px solid var(--border);";
+            item.addEventListener(
+              "mouseenter",
+              () => (item.style.background = "#f1f5f9"),
+            );
+            item.addEventListener(
+              "mouseleave",
+              () => (item.style.background = ""),
+            );
+            item.addEventListener("click", () => {
+              selectedRegion = r.code;
+              regionSelectedLabelEl.textContent = "Selected: " + r.label;
+            });
+            regionListEl.appendChild(item);
+          });
+      }
+      renderRegions("");
+      regionSearchEl.addEventListener("input", (e) =>
+        renderRegions(e.target.value),
+      );
+
+      const q6Group = document.querySelector(
+        '.options[data-field="q6_region_req"]',
+      );
+      const q6RegionQuestion = document.getElementById("q6-region-question");
+      q6Group.addEventListener("click", (e) => {
+        const opt = e.target.closest(".opt");
+        if (!opt) return;
+        if (opt.dataset.value === "Yes") {
+          q6RegionQuestion.style.display = "block";
+        } else {
+          q6RegionQuestion.style.display = "none";
+          selectedRegion = "";
+          regionSelectedLabelEl.textContent = "";
+          regionSearchEl.value = "";
+          renderRegions("");
+        }
+      });
+
+      // Form submission handler
+      document
+        .getElementById("onboardingForm")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          let valid = true;
+          const answers = {};
+
+          document.querySelectorAll(".options").forEach((group) => {
+            const field = group.dataset.field;
+            const required = group.dataset.required === "true";
+            const selected = group.querySelector(".opt.selected");
+            const errorMsg = group.parentElement.querySelector(".error-msg");
+
+            if (selected) {
+              answers[field] = selected.dataset.value;
+              if (errorMsg) errorMsg.style.display = "none";
+            } else if (required) {
+              valid = false;
+              if (errorMsg) errorMsg.style.display = "block";
+            }
+          });
+
+          answers["q3_tradeoff"] = document.getElementById("q3").value;
+          answers["security_constraints"] = Array.from(
+            document.querySelectorAll(".q1_1-checkbox:checked"),
+          ).map((cb) => cb.value);
+          answers["selected_azure_region"] = selectedRegion;
+
+          if (!valid) return;
+
+          const blob = new Blob([JSON.stringify(answers, null, 2)], {
+            type: "application/json",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "cloudsage_azure_responses.json";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        });
+    </script>
+  </body>
+</html>
